@@ -15,6 +15,7 @@ mongoose.connect("mongodb+srv://admin:admin@cluster0.1kaqz.mongodb.net/mevnshop"
 const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
+mongoose.set('useFindAndModify', false)
 routes.forEach((item) => {
     //console.log("Item=", item)
     app.use(`/api/v1/${item}`, require(`./src/routes/${item}`))

@@ -1,7 +1,7 @@
 const boom = require('boom')
 
 const genericCrud = (model) => ({
-    async get({params: {id}},req,res) {
+    async get({params: {id}},res) {
       try {
         const item = await model.findById(id)
           return res.status(200).send(item)
@@ -37,7 +37,7 @@ const genericCrud = (model) => ({
     async delete({params: {id}},res) {
       try {
         await model.findByIdAndDelete(id)
-        return {status: 200, message: 'Product Delete'}
+        return res.status(200).send(`Product Delete: ${id}`)
       } catch(err) {
         return res.status(400).send(boom.boomify(err))
       }
