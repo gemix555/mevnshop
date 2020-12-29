@@ -1,9 +1,35 @@
 <template>
+  <div id="app">
+    <Header :categories="categories"/>
+    <router-view/>
+  </div>
+ </template>
+<script>
+ import Header from '@/components/layouts/Header'
+export default {
+  name: 'App',
+  components: {
+    Header
+  },
+  data(){
+    return {
+      categories: [
+        {title:'PS4', id: 1},
+        {title:'XBOX', id: 2},
+        {title:'Nintendo', id: 3}
+      ]
+    }
 
-  <router-view/>
-</template>
+  }
+}
+</script>
 
+}
 <style lang="scss">
+html, body {
+  padding: 0;
+  margin: 0;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

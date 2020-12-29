@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const {routes} = require('./src/routes')
+const cors = require('cors')
 const http = require('http')
 
 /** BD */
@@ -13,6 +14,7 @@ mongoose.connect("mongodb+srv://admin:admin@cluster0.1kaqz.mongodb.net/mevnshop"
 
 /** initial */
 const app = express()
+app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 mongoose.set('useFindAndModify', false)
