@@ -1,9 +1,25 @@
 <template>
-  <div class="card">
-    <div class="card_header">
-      {{title}} - {{price}}$
-    </div>
-    <div class="banner" :style="`background-image: url(${imageUrl})`">
+  <div class="">
+    <div class="card" style="width: 18rem;">
+      <img :src="imageUrl" class="card-img-top" :alt="title">
+      <div class="card-body">
+        <p class="card-text">{{description}}</p>
+      </div>
+      <div class="button">
+        <button class="btn btn-info"
+                @click="$emit('addToCart')"
+                v-if="!inCart"
+        >
+          Добавить в корзину
+        </button>
+        <button class="btn btn-danger"
+                @click="$emit('addToCart')"
+                v-else
+        >
+          Удалить из корзины
+        </button>
+
+      </div>
     </div>
   </div>
 </template>
@@ -27,34 +43,12 @@ export default {
     inCart: {
       type: Boolean,
       default: false,
-    },
-    description: {
-      type: String,
-      default: '',
-    },
+    }
   },
 }
 </script>
 
 
 <style scoped lang="scss">
-  .card {
-    width: 340px;
-    height: 200px;
-    padding: 20px;
-    margin: 10px;
-    border: 1px solid black;
-    border-radius: 12px;
-    .banner {
-      width: 100%;
-      height: 80%;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-    &_footer {
-      margin-top: 10px;
 
-    }
-  }
 </style>

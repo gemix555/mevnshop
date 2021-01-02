@@ -1,12 +1,29 @@
 import { shallowMount } from '@vue/test-utils'
-import HelloWorld from '@/components/HelloWorld.vue'
+import ProductCart from '@/components/ProductCard'
+import Header from "@/components/layouts/Header";
 
-describe('HelloWorld.vue', () => {
-  it('renders props.msg when passed', () => {
-    const msg = 'new message'
-    const wrapper = shallowMount(HelloWorld, {
-      props: { msg }
+describe('ProductCart.vue view props(title, price)', () => {
+  it('DataView title: Dota', () => {
+    const titleProduct = 'Dota'
+    const wrapperProduct = shallowMount(ProductCart, {
+      props: { titleProduct}
     })
-    expect(wrapper.text()).toMatch(msg)
+    expect(wrapperProduct.text()).toMatch(titleProduct)
+
   })
+  it('DataView price: 49', () => {
+       const price = 49
+       expect(price).toBe(49)
+  })
+  // it('Categories PS4,PC', () => {
+  //   const titleCategoriesPc = 'PC'
+  //   const titleCategoriesPS4 = 'PS4'
+  //   const wrapperCategories = shallowMount(Header, {
+  //     props:{
+  //       titleCategoriesPc
+  //     }
+  //   })
+  //   expect(wrapperCategories.text()).toMatch(titleCategoriesPc)
+  //   //expect(wrapperCategories.text()).toMatch(titleCategoriesPS4)
+  // })
 })

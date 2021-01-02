@@ -1,25 +1,30 @@
 <template>
-  <div id="app">
-    <Header :categories="categories"/>
+  <div id="app" class="container">
+    <Header :categories="categories" :cartCount="cartCount"/>
     <router-view/>
   </div>
  </template>
 <script>
  import Header from '@/components/layouts/Header'
+ import {mapGetters, mapActions} from 'vuex'
 export default {
   name: 'App',
   components: {
     Header
   },
-  data(){
-    return {
-      categories: [
-        {title:'PS4', id: 1},
-        {title:'XBOX', id: 2},
-        {title:'Nintendo', id: 3}
-      ]
-    }
-
+ mounted() {
+   this.fetchCategories()
+ },
+  computed: {
+    ...mapGetters({
+      categories: 'categories',
+      cartCount: 'cartCount'
+    })
+  },
+  methods: {
+    ...mapActions({
+      fetchCategories: 'fetchCategories'
+    })
   }
 }
 </script>
