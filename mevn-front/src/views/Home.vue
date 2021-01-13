@@ -1,27 +1,29 @@
 <template>
   <div class="row">
-    <div class="col-4"
-        v-for="(product, key) in products"
-        :key="key"
+    <div
+      v-for="(product, key) in products"
+      :key="key"
+      class="col-lg-4 col-md-6 mb-4"
     >
       <ProductCard
-          :title="product.title"
-          :price="product.price"
-          :description="trimText(product.description)"
-          :imageUrl="product.imageUrl"
-          @add-to-cart="addToCart(product)"
-          :inCart="cartItemsIds.includes(product._id)"
+        :title="product.title"
+        :price="product.price"
+        :imageUrl="product.imageUrl"
+        @add-to-cart="addToCart(product)"
+        :inCart="cartItemsIds.includes(product._id)"
+        :description="product.description"
       />
     </div>
   </div>
 </template>
+
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
-import ProductCard from "@/components/ProductCard";
+
 export default {
   name: 'Home',
   components: {
-    ProductCard
+    ProductCard: () => import('@/components/ProductCard'),
   },
   mounted() {
     this.fetchProducts()
@@ -29,24 +31,17 @@ export default {
   computed: {
     ...mapGetters({
       products: 'products',
-      cartItems: 'cartItems'
+      cartItems: 'cartItems',
     }),
-    cartItemsIds: ({ cartItems }) => cartItems.map(({_id}) => _id)
+    cartItemsIds: ({ cartItems }) => cartItems.map(({ _id }) => _id),
   },
   methods: {
     ...mapActions({
       fetchProducts: 'fetchProducts',
     }),
     ...mapMutations({
-      addToCart: 'addToCart'
+      addToCart: 'addToCart',
     }),
-    trimText(text) {
-      const symbolsCount = 150
-      return text.length > symbolsCount
-          ? text.slice(0, symbolsCount - 3) + '...'
-          : text;
-    }
   },
-
 }
 </script>

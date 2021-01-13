@@ -1,10 +1,10 @@
 const boom = require('boom')
 
 const genericCrud = (model) => ({
-    async get({params: {id}},res) {
+    async get({params: { id }},res) {
       try {
         const item = await model.findById(id)
-          return res.status(200).send(item)
+        return res.status(200).send(item)
       } catch(err) {
         return res.status(400).send(boom.boomify(err))
       }
@@ -17,7 +17,7 @@ const genericCrud = (model) => ({
         return res.status(400).send(boom.boomify(err))
       }
     },
-    async create({body},res) {
+    async create({ body },res) {
       try {
           const item = new model(body)
           const newItem = await item.save()
@@ -26,7 +26,7 @@ const genericCrud = (model) => ({
         return res.status(400).send(boom.boomify(err))
       }
     },
-    async update({params: {id}, body, res}) {
+    async update({params: { id }, body, res}) {
       try {
           const item = await model.findByIdAndUpdate(id, body, {new: true})//new model
           return res.status(200).send(item)
@@ -34,10 +34,10 @@ const genericCrud = (model) => ({
         return res.status(400).send(boom.boomify(err))
       }
     },
-    async delete({params: {id}},res) {
+    async delete({params: { id }},res) {
       try {
         await model.findByIdAndDelete(id)
-        return res.status(200).send(`Product Delete: ${id}`)
+        return res.status(200).send(`Product Delete: ${ id }`)
       } catch(err) {
         return res.status(400).send(boom.boomify(err))
       }

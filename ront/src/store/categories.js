@@ -24,7 +24,6 @@ const actions = {
    async fetchCategories({commit}) {
        try {
            const categories = await getCategories()
-           console.log('categories Action', categories)
            commit('setCategories', categories)
        }catch (err) {
            commit('setCategoryError', err)

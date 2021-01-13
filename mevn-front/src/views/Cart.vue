@@ -1,57 +1,116 @@
 <template>
-  <div class="col-12">
-    <template v-if="cartItems" >
-
-        <div class="col-6 offset-4"
+  <div class="container">
+    <h2>Cart <font-awesome-icon icon="shopping-cart" /></h2>
+    <template v-if="cartItems.length > 0">
+      <template v-if="!paymentIntent">
+        <ul class="list-group">
+          <li
+            class="list-group-item"
             v-for="(item, key) in cartItems"
             :key="key"
-        >
-          <div class="card mb-3" style="max-width: 340px;">
-            <div class="row no-gutters">
-              <div class="col-md-4">
-                <img :src="item.imageUrl" class="card-img" :alt="item.title">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">{{item.title}} - {{item.price}}$</h5>
-                </div>
-              </div>
-            </div>
-          </div>
+          >
+            {{ item.title }} - {{ item.price }}$
+          </li>
+        </ul>
+        <div class="panel text-right">
+          Кол-во: {{ cartCount }}
+          <br />
+          Итого: {{ cartTotalPrice }}$
+          <hr />
         </div>
+      </template>
 
-      <div class="center">
-        Quantity: {{cartCount}}
-        Total: {{cartTotalPrice}}
-      </div>
+      <template v-if="!paymentIntent">
+        <UserForm @onFormSubmit="handleGetPaymentIntent" />
+      </template>
+
+      <template v-if="paymentIntent">
+        <card
+          ref="card"
+          class="stripe-card"
+          :class="{ complete }"
+          stripe="pk_test_51I5CI4IfRzrZzVqFhjeJUVHEQpv2LTXXNBUZrxQuIjn3NiBz8p60ycIySn6gnL4MMUUdYZx3ThO4iVOeLHonMyju00OYrCb3dI"
+          :options="stripeOptions"
+          @change="complete = $event.complete"
+        />
+        <button class="btn btn-success" @click="pay" :disabled="!complete">
+          Pay with credit card
+        </button>
+      </template>
     </template>
+
     <template v-else>
       <img
-          class="empty-image"
-          src="https://www.pngitem.com/pimgs/b/480-4803650_cart-icon-png.png"
-          alt="Cart empty"
-      >
-      <hr>
-      You Cart is empty
+        class="empty-image"
+        src="https://images.pexels.com/photos/21067/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+      />
+      <hr />
+      Your cart is empty please add items to it
     </template>
   </div>
-
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { Card, handleCardPayment } from 'vue-stripe-elements-plus'
+import UserForm from '@/components/UserForm'
+
 export default {
-name: "Cart",
+  name: 'Cart',
+  components: {
+    Card,
+    UserForm,
+  },
+  data: () => ({
+    complete: false,
+    stripeOptions: {
+      // see https://stripe.com/docs/stripe.js#element-options for details
+    },
+    paymentIntent: null,
+  }),
   computed: {
-  ...mapGetters({
-    cartTotalPrice: 'cartTotalPrice',
-    cartItems: 'cartItems',
-    cartCount: 'cartCount'
-  })
-  }
+    ...mapGetters({
+      cartItems: 'cartItems',
+      cartTotalPrice: 'cartTotalPrice',
+      cartCount: 'cartCount',
+    }),
+  },
+  methods: {
+    ...mapActions({
+      handleBuy: 'handleBuy',
+    }),
+    ...mapMutations({
+      clearCart: 'clearCart',
+    }),
+    async handleGetPaymentIntent(form) {
+      try {
+        const intent = await this.handleBuy({
+          ...form,
+          products: this.cartItems,
+        })
+        this.paymentIntent = intent.paymentIntent.client_secret
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async pay() {
+      try {
+        await handleCardPayment(this.paymentIntent)
+        this.clearCart()
+      } catch (err) {
+        console.log(err)
+      }
+    },
+  },
 }
 </script>
 
-<style scoped>
-
+<style>
+.empty-image {
+  width: 400px;
+}
+.__PrivateStripeElement {
+  padding: 10px !important;
+  margin-bottom: 10px !important;
+}
 </style>

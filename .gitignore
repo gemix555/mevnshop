@@ -1,3 +1,4 @@
 # Project exclude paths
 /mevn-back/node_modules/
 .idea
+node_modules

@@ -1,12 +1,15 @@
-import { createStore } from 'vuex'
-import product from './product'
-import categories from './categories'
-import cart from "@/store/cart";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import product from './product';
+import category from './category';
+import cart from './cart';
 
-export default createStore({
+Vue.use(Vuex);
+
+export default new Vuex.Store({
   modules: {
     product,
-    categories,
-    cart
-  }
-})
+    category,
+    cart,
+  },
+});

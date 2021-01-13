@@ -16,13 +16,13 @@ mongoose.connect("mongodb+srv://admin:admin@cluster0.1kaqz.mongodb.net/mevnshop"
 const app = express()
 app.use(cors())
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({ extended: true }))
 mongoose.set('useFindAndModify', false)
 routes.forEach((item) => {
     console.log("Item=", item)
-    app.use(`/api/v1/${item}`, require(`./src/routes/${item}`))
+    app.use(`/api/v1/${ item }`, require(`./src/routes/${ item }`))
 })
 /** Server */
 const PORT = 3000
 http.createServer({}, app).listen(PORT)
-console.log(`Server start http://localhost:${PORT}`)
+console.log(`Server start http://localhost:${ PORT }`)
